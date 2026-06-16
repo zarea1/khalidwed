@@ -410,6 +410,40 @@ body{
   <div class="btn-row" id="btn-row"></div>
 </div>
 
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+query,
+orderBy
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyAgtNJBgjVyiI4lUiz1Og1n4MnGB5Pd-68",
+ authDomain: "wedding-invitation-35419.firebaseapp.com",
+ projectId: "wedding-invitation-35419"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+window.db = db;
+
+</script>
+
+
+
+
+
+
 <script>
 const PAGES=[
   {id:'page-1',label:'الدعوة'},
@@ -501,15 +535,52 @@ function renderComments(){
 
 function likeComment(i){comments[i].liked=!comments[i].liked;comments[i].likes+=comments[i].liked?1:-1;renderComments();}
 
-function addComment(){
-  const n=document.getElementById('cm-name').value.trim();
-  const t=document.getElementById('cm-text').value.trim();
-  if(!n||!t){alert('من فضلك أدخل اسمك والتهنئة');return;}
-  comments.unshift({name:n,text:t,time:'الآن',liked:false,likes:0});
-  document.getElementById('cm-name').value='';
-  document.getElementById('cm-text').value='';
-  renderComments();
+async function addComment() {
+
+ const name =
+ document.getElementById('cm-name').value.trim();
+
+ const text =
+ document.getElementById('cm-text').value.trim();
+
+ if(!name || !text){
+   alert("أدخل الاسم والتعليق");
+   return;
+ }
+
+ await addDoc(
+   collection(db,"comments"),
+   {
+     name:name,
+     text:text,
+     createdAt:Date.now()
+   }
+ );
+
 }
+
+
+async function loadComments(){
+
+ const q = query(
+   collection(db,"comments"),
+   orderBy("createdAt","desc")
+ );
+
+ const snapshot = await getDocs(q);
+
+ comments.length = 0;
+
+ snapshot.forEach(doc=>{
+
+   comments.push(doc.data());
+
+ });
+
+ renderComments();
+
+}
+
 
 function selectAttend(v){
   attendChoice=v;
