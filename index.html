@@ -410,39 +410,67 @@ body{
   <div class="btn-row" id="btn-row"></div>
 </div>
 
+
+<!-- FIREBASE SDKS -->
 <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyAgtNJBgjVyiI4lUiz1Og1n4MnGB5Pd-68",
+        authDomain: "wedding-invitation-35419.firebaseapp.com",
+        projectId: "wedding-invitation-35419",
+        storageBucket: "wedding-invitation-35419.firebasestorage.app",
+        messagingSenderId: "454051225904",
+        appId: "1:454051225904:web:4ab8895cfcf1e8aa7668f5"
+    };
 
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-query,
-orderBy
-}
-from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-const firebaseConfig = {
- apiKey: "AIzaSyAgtNJBgjVyiI4lUiz1Og1n4MnGB5Pd-68",
- authDomain: "wedding-invitation-35419.firebaseapp.com",
- projectId: "wedding-invitation-35419"
-};
+    // SUBMIT COMMENT
+    document.getElementById('submitComment').addEventListener('click', async () => {
+        const name = document.getElementById('guestName').value.trim();
+        const message = document.getElementById('guestMessage').value.trim();
 
-const app = initializeApp(firebaseConfig);
+        if (name && message) {
+            try {
+                await addDoc(collection(db, "congrats"), {
+                    name: name,
+                    message: message,
+                    timestamp: serverTimestamp()
+                });
+                document.getElementById('guestName').value = '';
+                document.getElementById('guestMessage').value = '';
+            } catch (e) {
+                alert("عذراً، حدث خطأ أثناء الإرسال.");
+            }
+        } else {
+            alert("يرجى كتابة الاسم والرسالة.");
+        }
+    });
 
-const db = getFirestore(app);
-
-window.db = db;
-
+    // LOAD COMMENTS REAL-TIME
+    const q = query(collection(db, "congrats"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (snapshot) => {
+        const list = document.getElementById('commentsList');
+        list.innerHTML = '';
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const item = document.createElement('div');
+            item.className = 'comment-item';
+            item.innerHTML = `
+                <div class="cm-name">${data.name}</div>
+                <div class="cm-text">${data.message}</div>
+                <div class="cm-time">${data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString('ar-EG') : 'الآن'}</div>
+            `;
+            list.appendChild(item);
+        });
+        if (snapshot.empty) {
+            list.innerHTML = '<p style="text-align: center; color: #999;">كن أول من يهنئ العروسين!</p>';
+        }
+    });
 </script>
-
-
-
-
-
 
 <script>
 const PAGES=[
@@ -535,52 +563,15 @@ function renderComments(){
 
 function likeComment(i){comments[i].liked=!comments[i].liked;comments[i].likes+=comments[i].liked?1:-1;renderComments();}
 
-async function addComment() {
-
- const name =
- document.getElementById('cm-name').value.trim();
-
- const text =
- document.getElementById('cm-text').value.trim();
-
- if(!name || !text){
-   alert("أدخل الاسم والتعليق");
-   return;
- }
-
- await addDoc(
-   collection(db,"comments"),
-   {
-     name:name,
-     text:text,
-     createdAt:Date.now()
-   }
- );
-
+function addComment(){
+  const n=document.getElementById('cm-name').value.trim();
+  const t=document.getElementById('cm-text').value.trim();
+  if(!n||!t){alert('من فضلك أدخل اسمك والتهنئة');return;}
+  comments.unshift({name:n,text:t,time:'الآن',liked:false,likes:0});
+  document.getElementById('cm-name').value='';
+  document.getElementById('cm-text').value='';
+  renderComments();
 }
-
-
-async function loadComments(){
-
- const q = query(
-   collection(db,"comments"),
-   orderBy("createdAt","desc")
- );
-
- const snapshot = await getDocs(q);
-
- comments.length = 0;
-
- snapshot.forEach(doc=>{
-
-   comments.push(doc.data());
-
- });
-
- renderComments();
-
-}
-
 
 function selectAttend(v){
   attendChoice=v;
