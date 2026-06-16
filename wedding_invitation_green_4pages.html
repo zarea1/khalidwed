@@ -1,0 +1,422 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#4a7c47;--green-dark:#2d5a2a;--green-light:#e8f5e4;
+  --green-mid:#6a9e67;--cream:#f7f5f0;--pink:#e8a0a0;--pink-light:#fce8e8;
+  --gold:#b8962a;--text:#2d3a2d;--gray:#7a8a7a;
+}
+body{background:transparent;font-family:'Tajawal',sans-serif;direction:rtl;}
+#app{background:transparent;padding:12px 8px 20px;}
+.page-nav{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;}
+.dot{width:10px;height:10px;border-radius:50%;background:#ccc;cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--green);transform:scale(1.3);}
+.dot:hover{background:var(--green-mid);}
+.card{width:100%;max-width:420px;margin:0 auto;background:var(--cream);border-radius:4px;position:relative;overflow:hidden;min-height:580px;}
+.page{display:none;flex-direction:column;align-items:center;}
+.page.active{display:flex;}
+.arch-wrap{width:88%;margin:-8px auto 0;background:#8fac6a;border-radius:120px 120px 0 0;padding:20px 20px 24px;text-align:center;position:relative;z-index:2;}
+.rings{font-size:36px;margin-bottom:8px;display:block;animation:ring-sway 3s ease-in-out infinite;}
+@keyframes ring-sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.sub-text{color:#fff;font-size:13px;line-height:1.7;margin-bottom:4px;opacity:.9;}
+.main-names{font-family:'Amiri',serif;color:#1a3a18;font-size:52px;font-weight:700;line-height:1.15;margin:4px 0;animation:name-pulse 4s ease-in-out infinite;}
+@keyframes name-pulse{0%,100%{opacity:1}50%{opacity:.85}}
+.amp{color:#fff;font-size:32px;}
+.tagline{color:#e8f5e4;font-size:13px;margin-top:6px;}
+.date-row{display:flex;align-items:center;gap:0;border-top:1px solid rgba(255,255,255,.3);border-bottom:1px solid rgba(255,255,255,.3);margin:14px 0 10px;width:100%;}
+.date-cell{flex:1;padding:10px 6px;text-align:center;color:#fff;}
+.date-cell+.date-cell{border-right:1px solid rgba(255,255,255,.3);}
+.date-lbl{font-size:11px;opacity:.8;margin-bottom:3px;}
+.date-val{font-family:'Amiri',serif;font-size:20px;font-weight:700;}
+.date-hex{width:54px;height:54px;background:rgba(255,255,255,.15);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;flex-shrink:0;flex-direction:column;color:#fff;}
+.date-hex .big{font-family:'Amiri',serif;font-size:22px;font-weight:700;line-height:1;}
+.date-hex .sm{font-size:10px;opacity:.8;}
+.location{color:#e8f5e4;font-size:13px;margin-top:4px;}
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0;}
+.cd-box{background:rgba(255,255,255,.2);border-radius:8px;padding:8px 4px;text-align:center;}
+.cd-num{font-family:'Amiri',serif;font-size:24px;font-weight:700;color:#fff;display:block;}
+.cd-lbl{font-size:10px;color:rgba(255,255,255,.8);}
+.p2-inner{padding:0 20px 20px;width:100%;}
+.sec-title{font-family:'Amiri',serif;color:var(--green-dark);font-size:20px;font-weight:700;text-align:center;margin:18px 0 12px;position:relative;}
+.sec-title::before,.sec-title::after{content:'❧';color:var(--green-mid);font-size:14px;margin:0 8px;}
+.info-card{background:#fff;border-radius:12px;border:1px solid #d8e8d4;padding:16px;margin-bottom:12px;}
+.info-card-head{display:flex;align-items:center;gap:10px;border-bottom:1px solid #eef5ec;padding-bottom:10px;margin-bottom:10px;}
+.ic-icon{font-size:28px;}
+.ic-title{color:var(--green-dark);font-size:16px;font-weight:700;font-family:'Amiri',serif;}
+.ic-sub{color:var(--gray);font-size:12px;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;}
+.ir-lbl{color:var(--gray);font-size:13px;}
+.ir-val{color:var(--text);font-size:14px;font-weight:700;}
+.map-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green-dark);color:#fff;border-radius:8px;padding:11px 20px;font-size:14px;font-weight:700;text-decoration:none;border:none;cursor:pointer;width:100%;margin-top:4px;transition:background .2s;font-family:'Tajawal',sans-serif;}
+.map-btn:hover{background:var(--green);}
+.comments-wrap{padding:0 16px 20px;width:100%;}
+.comment-input-area{background:#fff;border-radius:12px;border:1px solid #d8e8d4;padding:14px;margin:10px 0;}
+.commenter-name-row{display:flex;gap:8px;margin-bottom:8px;}
+.commenter-name-row input{flex:1;border:1px solid #d8e8d4;border-radius:8px;padding:8px 12px;font-family:'Tajawal',sans-serif;font-size:13px;color:var(--text);background:#fafff9;outline:none;}
+.commenter-name-row input:focus{border-color:var(--green);}
+.comment-ta{width:100%;border:1px solid #d8e8d4;border-radius:8px;padding:10px 12px;font-family:'Tajawal',sans-serif;font-size:13px;color:var(--text);resize:none;background:#fafff9;outline:none;min-height:80px;direction:rtl;}
+.comment-ta:focus{border-color:var(--green);}
+.send-btn{background:var(--green-dark);color:#fff;border:none;border-radius:8px;padding:9px 24px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;transition:background .2s;}
+.send-btn:hover{background:var(--green);}
+.comments-list{margin-top:12px;}
+.comment-item{background:#fff;border-radius:10px;border:1px solid #eef5ec;padding:12px;margin-bottom:10px;animation:slide-in .4s ease;}
+@keyframes slide-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.comment-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--green-light);border:2px solid var(--green-mid);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--green-dark);flex-shrink:0;}
+.cm-name{color:var(--green-dark);font-size:13px;font-weight:700;}
+.cm-time{color:var(--gray);font-size:11px;margin-right:auto;}
+.cm-heart{background:none;border:none;cursor:pointer;color:#ccc;font-size:16px;transition:color .2s,transform .2s;padding:2px 4px;}
+.cm-heart.liked{color:#e07a98;transform:scale(1.2);}
+.cm-text{color:var(--text);font-size:13px;line-height:1.6;}
+.rsvp-wrap{padding:0 20px 20px;width:100%;}
+.rsvp-form{background:#fff;border-radius:12px;border:1px solid #d8e8d4;padding:16px;margin:10px 0;}
+.rsvp-label{color:var(--green-dark);font-size:13px;font-weight:700;margin-bottom:6px;display:block;}
+.rsvp-input{width:100%;border:1px solid #d8e8d4;border-radius:8px;padding:9px 12px;font-family:'Tajawal',sans-serif;font-size:13px;color:var(--text);background:#fafff9;outline:none;margin-bottom:12px;direction:rtl;}
+.rsvp-input:focus{border-color:var(--green);}
+.attend-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.att-btn{border:2px solid #d8e8d4;border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:#fafff9;font-family:'Tajawal',sans-serif;font-size:13px;color:var(--gray);transition:all .2s;}
+.att-btn.sel-yes{border-color:var(--green);background:var(--green-light);color:var(--green-dark);}
+.att-btn.sel-no{border-color:#e07a98;background:#fce8e8;color:#8b2a2a;}
+.att-icon{font-size:24px;display:block;margin-bottom:4px;}
+.rsvp-submit{background:var(--green-dark);color:#fff;border:none;border-radius:8px;padding:11px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;width:100%;transition:background .2s;}
+.rsvp-submit:hover{background:var(--green);}
+.rsvp-success{text-align:center;padding:30px 20px;display:none;}
+.rsvp-success .tick{font-size:48px;display:block;margin-bottom:12px;animation:pop .5s ease;}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.rsvp-success p{color:var(--green-dark);font-size:16px;font-family:'Amiri',serif;font-weight:700;}
+.rsvp-list{margin-top:14px;}
+.rsvp-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-radius:10px;border:1px solid #eef5ec;margin-bottom:8px;}
+.rsvp-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:700;}
+.rsvp-badge.yes{background:var(--green-light);color:var(--green-dark);}
+.rsvp-badge.no{background:#fce8e8;color:#8b2a2a;}
+.petal-container{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:99;}
+.petal{position:absolute;top:-30px;opacity:0;animation:fall-p linear infinite;font-size:16px;}
+@keyframes fall-p{0%{opacity:.9;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(620px) rotate(540deg)}}
+.btn-row{display:flex;justify-content:center;gap:10px;margin:14px auto 0;max-width:420px;}
+.nav-btn{flex:1;padding:9px;border:1px solid #c8dcc4;border-radius:8px;background:#fff;color:var(--green-dark);font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;max-width:180px;}
+.nav-btn:hover{background:var(--green-light);}
+.nav-btn.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark);}
+.nav-btn.primary:hover{background:var(--green);}
+</style>
+
+<div id="app">
+  <div class="page-nav" id="dots"></div>
+
+  <div class="card" id="main-card">
+    <div class="petal-container" id="petals"></div>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page active" id="page-1">
+      <svg viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <rect width="420" height="160" fill="#f0f8ee"/>
+        <ellipse cx="60" cy="30" rx="40" ry="18" fill="#5a8a50" opacity=".7" transform="rotate(-30,60,30)"/>
+        <ellipse cx="30" cy="60" rx="35" ry="14" fill="#4a7a40" opacity=".6" transform="rotate(-60,30,60)"/>
+        <ellipse cx="100" cy="20" rx="30" ry="12" fill="#6a9e60" opacity=".65" transform="rotate(-15,100,20)"/>
+        <ellipse cx="360" cy="30" rx="40" ry="18" fill="#5a8a50" opacity=".7" transform="rotate(30,360,30)"/>
+        <ellipse cx="390" cy="60" rx="35" ry="14" fill="#4a7a40" opacity=".6" transform="rotate(60,390,60)"/>
+        <ellipse cx="320" cy="20" rx="30" ry="12" fill="#6a9e60" opacity=".65" transform="rotate(15,320,20)"/>
+        <circle cx="340" cy="40" r="22" fill="#f0ece4" opacity=".9"/>
+        <circle cx="340" cy="40" r="16" fill="#f7f4ef" opacity=".9"/>
+        <circle cx="340" cy="40" r="10" fill="#fff" opacity=".95"/>
+        <circle cx="355" cy="28" r="18" fill="#ede9e1" opacity=".85"/>
+        <circle cx="355" cy="28" r="12" fill="#f5f2ec" opacity=".9"/>
+        <circle cx="355" cy="28" r="7" fill="#fff" opacity=".95"/>
+        <circle cx="75" cy="45" r="20" fill="#f0c8b8" opacity=".85"/>
+        <circle cx="75" cy="45" r="14" fill="#f5d4c4" opacity=".9"/>
+        <circle cx="75" cy="45" r="8" fill="#fce8de" opacity=".95"/>
+        <circle cx="58" cy="32" r="16" fill="#eebeae" opacity=".8"/>
+        <circle cx="58" cy="32" r="10" fill="#f5cebe" opacity=".85"/>
+        <line x1="70" y1="90" x2="60" y2="130" stroke="#5a8a50" stroke-width="1.5" opacity=".5"/>
+        <line x1="350" y1="90" x2="360" y2="130" stroke="#5a8a50" stroke-width="1.5" opacity=".5"/>
+      </svg>
+
+      <div class="arch-wrap">
+        <span class="rings">💍</span>
+        <div class="sub-text">بكل الود والمحبة والتقدير<br>تتشرف بدعوتكم لحفل زفاف</div>
+        <div class="main-names">خالد</div>
+        <div class="amp">&#x26;</div>
+        <div class="main-names">وسام</div>
+        <div class="tagline">وبحضوركم تكتمل أفراحنا 🌿</div>
+        <div class="countdown">
+          <div class="cd-box"><span class="cd-num" id="cd-d">00</span><span class="cd-lbl">يوم</span></div>
+          <div class="cd-box"><span class="cd-num" id="cd-h">00</span><span class="cd-lbl">ساعة</span></div>
+          <div class="cd-box"><span class="cd-num" id="cd-m">00</span><span class="cd-lbl">دقيقة</span></div>
+          <div class="cd-box"><span class="cd-num" id="cd-s">00</span><span class="cd-lbl">ثانية</span></div>
+        </div>
+        <script>
+        // كود العداد التنازلي المباشر
+        const target = new Date("July 14, 2026 20:00:00").getTime();
+
+        function runTimer() {
+            const now = new Date().getTime();
+            const gap = target - now;
+
+            if (gap > 0) {
+                const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+                const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((gap % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerHTML = d;
+                document.getElementById("hours").innerHTML = h;
+                document.getElementById("minutes").innerHTML = m;
+                document.getElementById("seconds").innerHTML = s;
+            } else {
+                document.getElementById("days").innerHTML = "0";
+                document.getElementById("hours").innerHTML = "0";
+                document.getElementById("minutes").innerHTML = "0";
+                document.getElementById("seconds").innerHTML = "0";
+            }
+        }
+
+        // تحديث كل ثانية بشكل فوري
+        setInterval(runTimer, 1000);
+        runTimer(); // تشغيل فوري عند التحميل
+    </script>
+        <div class="date-row">
+          <div class="date-cell"><div class="date-lbl">يوم</div><div class="date-val">الثلاثاء</div></div>
+          <div class="date-hex"><div class="big">14</div><div class="sm">يوليو</div></div>
+          <div class="date-cell"><div class="date-lbl">الساعة</div><div class="date-val">8:00 م</div></div>
+        </div>
+        <div class="location">📍 قاعة جراند فيستيفال — بني سويف</div>
+      </div>
+
+      <svg viewBox="0 0 420 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-top:auto;">
+        <rect width="420" height="80" fill="#f0f8ee"/>
+        <circle cx="80" cy="60" r="35" fill="#f0c8b8" opacity=".8"/>
+        <circle cx="80" cy="60" r="24" fill="#f5d4c4" opacity=".85"/>
+        <circle cx="120" cy="50" r="28" fill="#ede9e1" opacity=".75"/>
+        <circle cx="120" cy="50" r="18" fill="#f5f2ec" opacity=".8"/>
+        <circle cx="340" cy="55" r="32" fill="#f0c8b8" opacity=".8"/>
+        <circle cx="340" cy="55" r="22" fill="#f5d4c4" opacity=".85"/>
+        <circle cx="300" cy="62" r="26" fill="#ede9e1" opacity=".75"/>
+        <ellipse cx="200" cy="70" rx="50" ry="20" fill="#6a9e60" opacity=".5" transform="rotate(-5,200,70)"/>
+        <ellipse cx="180" cy="65" rx="35" ry="14" fill="#5a8a50" opacity=".45" transform="rotate(10,180,65)"/>
+        <ellipse cx="240" cy="68" rx="30" ry="12" fill="#6a9e60" opacity=".4" transform="rotate(-15,240,68)"/>
+      </svg>
+    </div>
+
+    <!-- PAGE 2: DETAILS -->
+    <div class="page" id="page-2">
+      <svg viewBox="0 0 420 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+        <rect width="420" height="100" fill="#e8f5e4"/>
+        <ellipse cx="60" cy="40" rx="50" ry="22" fill="#5a8a50" opacity=".5" transform="rotate(-20,60,40)"/>
+        <ellipse cx="360" cy="40" rx="50" ry="22" fill="#5a8a50" opacity=".5" transform="rotate(20,360,40)"/>
+        <circle cx="80" cy="70" r="28" fill="#f0c8b8" opacity=".7"/>
+        <circle cx="80" cy="70" r="18" fill="#f5d4c4" opacity=".75"/>
+        <circle cx="345" cy="65" r="26" fill="#ede9e1" opacity=".7"/>
+        <circle cx="345" cy="65" r="16" fill="#f5f2ec" opacity=".75"/>
+        <text x="210" y="55" text-anchor="middle" font-family="Amiri,serif" font-size="22" font-weight="700" fill="#2d5a2a">تفاصيل الحفل</text>
+        <line x1="120" y1="60" x2="300" y2="60" stroke="#6a9e60" stroke-width="1" opacity=".5"/>
+      </svg>
+      <div class="p2-inner">
+        <div class="info-card">
+          <div class="info-card-head">
+            <div class="ic-icon">🎊</div>
+            <div><div class="ic-title">حفل الزفاف</div><div class="ic-sub">حفل رسمي</div></div>
+          </div>
+          <div class="info-row"><span class="ir-lbl">📅 التاريخ</span><span class="ir-val">الثلاثاء — 14 يوليو</span></div>
+          <div class="info-row"><span class="ir-lbl">⏰ الوقت</span><span class="ir-val">8:00 مساءً</span></div>
+          <div class="info-row"><span class="ir-lbl">📍 المكان</span><span class="ir-val">قاعة جراند فيستيفال</span></div>
+          <div class="info-row"><span class="ir-lbl">🌍 العنوان</span><span class="ir-val">بني سويف — شرق النيل</span></div>
+          <a class="map-btn" href="https://maps.app.goo.gl/U8ZwEjSV8rWeTMFE8?g_st=ic" target="_blank" rel="noopener">🗺️ &nbsp; فتح في خرائط جوجل</a>
+        </div>
+        <div class="info-card">
+          <div class="info-card-head">
+            <div class="ic-icon">🌿</div>
+            <div><div class="ic-title">حفل الحناء وواجب الضيافة</div><div class="ic-sub">ليلة قبل الزفاف</div></div>
+          </div>
+          <div class="info-row"><span class="ir-lbl">📅 التاريخ</span><span class="ir-val">الإثنين — 13 يوليو</span></div>
+          <div class="info-row"><span class="ir-lbl">⏰ الوقت</span><span class="ir-val">4:00 عصراً</span></div>
+          <div class="info-row"><span class="ir-lbl">📍 المكان</span><span class="ir-val">أمام المنزل الواسطي</span></div>
+          <div class="info-row"><span class="ir-lbl">🏘️ الحي</span><span class="ir-val">حي الإبراهيمية</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: COMMENTS -->
+    <div class="page" id="page-3">
+      <svg viewBox="0 0 420 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+        <rect width="420" height="90" fill="#e8f5e4"/>
+        <ellipse cx="60" cy="50" rx="45" ry="20" fill="#5a8a50" opacity=".4" transform="rotate(-15,60,50)"/>
+        <ellipse cx="360" cy="50" rx="45" ry="20" fill="#5a8a50" opacity=".4" transform="rotate(15,360,50)"/>
+        <text x="210" y="52" text-anchor="middle" font-family="Amiri,serif" font-size="22" font-weight="700" fill="#2d5a2a">التهاني والتعليقات</text>
+        <line x1="80" y1="60" x2="340" y2="60" stroke="#6a9e60" stroke-width="1" opacity=".5"/>
+      </svg>
+      <div class="comments-wrap">
+        <div class="comment-input-area">
+          <div class="commenter-name-row">
+            <input type="text" id="cm-name" placeholder="اسمك" maxlength="30">
+          </div>
+          <textarea class="comment-ta" id="cm-text" placeholder="اكتب تهنئتك هنا... 💚" maxlength="200"></textarea>
+          <button class="send-btn" onclick="addComment()">إرسال التهنئة 💌</button>
+        </div>
+        <div class="comments-list" id="comments-list"></div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: RSVP -->
+    <div class="page" id="page-4">
+      <svg viewBox="0 0 420 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+        <rect width="420" height="90" fill="#e8f5e4"/>
+        <ellipse cx="60" cy="50" rx="45" ry="20" fill="#5a8a50" opacity=".4" transform="rotate(-15,60,50)"/>
+        <ellipse cx="360" cy="50" rx="45" ry="20" fill="#5a8a50" opacity=".4" transform="rotate(15,360,50)"/>
+        <text x="210" y="52" text-anchor="middle" font-family="Amiri,serif" font-size="22" font-weight="700" fill="#2d5a2a">تأكيد الحضور</text>
+        <line x1="110" y1="60" x2="310" y2="60" stroke="#6a9e60" stroke-width="1" opacity=".5"/>
+      </svg>
+      <div class="rsvp-wrap">
+        <div class="rsvp-form" id="rsvp-form">
+          <label class="rsvp-label">اسمك الكريم</label>
+          <input class="rsvp-input" type="text" id="rsvp-name" placeholder="أدخل اسمك">
+          <label class="rsvp-label">عدد الأشخاص المرافقين</label>
+          <input class="rsvp-input" type="number" id="rsvp-count" placeholder="0" min="0" max="10" value="1">
+          <label class="rsvp-label">هل ستحضر؟</label>
+          <div class="attend-btns">
+            <div class="att-btn" id="btn-yes" onclick="selectAttend('yes')"><span class="att-icon">✅</span>نعم، سأحضر</div>
+            <div class="att-btn" id="btn-no" onclick="selectAttend('no')"><span class="att-icon">❌</span>لن أتمكن</div>
+          </div>
+          <button class="rsvp-submit" onclick="submitRsvp()">تأكيد الحضور</button>
+        </div>
+        <div class="rsvp-success" id="rsvp-success">
+          <span class="tick">🎉</span>
+          <p>شكراً لك! تم تسجيل ردك بنجاح</p>
+          <p style="font-size:13px;color:var(--gray);margin-top:6px;font-family:Tajawal">ننتظرك بكل حب 💚</p>
+        </div>
+        <div class="rsvp-list" id="rsvp-list"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="btn-row" id="btn-row"></div>
+</div>
+
+<script>
+const PAGES=[
+  {id:'page-1',label:'الدعوة'},
+  {id:'page-2',label:'التفاصيل'},
+  {id:'page-3',label:'التهاني'},
+  {id:'page-4',label:'الحضور'},
+];
+let cur=0;
+const comments=[
+  {name:'أم محمد',text:'ألف مبروك! يسعد الله أيامكم ويديم المحبة بينكم 🌹',time:'منذ ساعة',liked:false,likes:5},
+  {name:'خالد العمر',text:'مبروك خالد! ربنا يهنيكم ويبارك لكم 💚',time:'منذ 30 دقيقة',liked:false,likes:3},
+];
+const rsvps=[];
+let attendChoice=null;
+
+function initDots(){
+  const c=document.getElementById('dots');
+  PAGES.forEach((_,i)=>{
+    const b=document.createElement('button');
+    b.className='dot'+(i===0?' active':'');
+    b.onclick=()=>goTo(i);
+    c.appendChild(b);
+  });
+}
+
+function updateBtns(){
+  const r=document.getElementById('btn-row');r.innerHTML='';
+  if(cur>0){const b=document.createElement('button');b.className='nav-btn';b.textContent='→ السابق';b.onclick=()=>goTo(cur-1);r.appendChild(b);}
+  if(cur<PAGES.length-1){const b=document.createElement('button');b.className='nav-btn primary';b.textContent='التالي ←';b.onclick=()=>goTo(cur+1);r.appendChild(b);}
+}
+
+function goTo(i){
+  document.getElementById(PAGES[cur].id).classList.remove('active');
+  document.querySelectorAll('.dot')[cur].classList.remove('active');
+  cur=i;
+  document.getElementById(PAGES[cur].id).classList.add('active');
+  document.querySelectorAll('.dot')[cur].classList.add('active');
+  updateBtns();
+}
+
+function startCountdown(){
+  const target=new Date('2026-07-14T20:00:00');
+  function tick(){
+    const now=new Date();
+    let diff=Math.max(0,target-now);
+    const d=Math.floor(diff/86400000);diff%=86400000;
+    const h=Math.floor(diff/3600000);diff%=3600000;
+    const m=Math.floor(diff/60000);diff%=60000;
+    const s=Math.floor(diff/1000);
+    document.getElementById('cd-d').textContent=String(d).padStart(2,'0');
+    document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+  }
+  tick();setInterval(tick,1000);
+}
+
+function startPetals(){
+  const c=document.getElementById('petals');
+  const emojis=['🌸','🌹','🌷','🍃','💮'];
+  function p(){
+    const el=document.createElement('div');el.className='petal';
+    el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    const sz=12+Math.random()*10;
+    el.style.cssText=`left:${Math.random()*100}%;font-size:${sz}px;animation-duration:${5+Math.random()*5}s;animation-delay:${Math.random()*2}s;`;
+    c.appendChild(el);setTimeout(()=>el.remove(),12000);
+  }
+  setInterval(p,1200);
+  for(let i=0;i<4;i++) setTimeout(p,i*600);
+}
+
+function renderComments(){
+  const list=document.getElementById('comments-list');list.innerHTML='';
+  comments.forEach((cm,i)=>{
+    const d=document.createElement('div');d.className='comment-item';
+    d.innerHTML=`<div class="comment-header">
+      <div class="avatar">${cm.name[0]}</div>
+      <span class="cm-name">${cm.name}</span>
+      <span class="cm-time">${cm.time}</span>
+      <button class="cm-heart${cm.liked?' liked':''}" onclick="likeComment(${i})">${cm.liked?'❤️':'🤍'} ${cm.likes}</button>
+    </div><div class="cm-text">${cm.text}</div>`;
+    list.appendChild(d);
+  });
+}
+
+function likeComment(i){comments[i].liked=!comments[i].liked;comments[i].likes+=comments[i].liked?1:-1;renderComments();}
+
+function addComment(){
+  const n=document.getElementById('cm-name').value.trim();
+  const t=document.getElementById('cm-text').value.trim();
+  if(!n||!t){alert('من فضلك أدخل اسمك والتهنئة');return;}
+  comments.unshift({name:n,text:t,time:'الآن',liked:false,likes:0});
+  document.getElementById('cm-name').value='';
+  document.getElementById('cm-text').value='';
+  renderComments();
+}
+
+function selectAttend(v){
+  attendChoice=v;
+  document.getElementById('btn-yes').className='att-btn'+(v==='yes'?' sel-yes':'');
+  document.getElementById('btn-no').className='att-btn'+(v==='no'?' sel-no':'');
+}
+
+function submitRsvp(){
+  const n=document.getElementById('rsvp-name').value.trim();
+  const c=parseInt(document.getElementById('rsvp-count').value)||1;
+  if(!n){alert('من فضلك أدخل اسمك');return;}
+  if(!attendChoice){alert('من فضلك حدد هل ستحضر أم لا');return;}
+  rsvps.unshift({name:n,count:c,attend:attendChoice});
+  document.getElementById('rsvp-form').style.display='none';
+  document.getElementById('rsvp-success').style.display='block';
+  const list=document.getElementById('rsvp-list');list.innerHTML='';
+  rsvps.forEach(r=>{
+    const d=document.createElement('div');d.className='rsvp-item';
+    d.innerHTML=`<div class="avatar">${r.name[0]}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">${r.name}</div>
+      <div style="font-size:12px;color:var(--gray)">${r.count} شخص</div></div>
+      <span class="rsvp-badge ${r.attend}">${r.attend==='yes'?'سيحضر ✅':'لن يحضر ❌'}</span>`;
+    list.appendChild(d);
+  });
+}
+
+initDots();
+updateBtns();
+startCountdown();
+startPetals();
+renderComments();
+</script>
