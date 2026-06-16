@@ -1,4 +1,8 @@
 
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head/>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -7,13 +11,37 @@
   --green-mid:#6a9e67;--cream:#f7f5f0;--pink:#e8a0a0;--pink-light:#fce8e8;
   --gold:#b8962a;--text:#2d3a2d;--gray:#7a8a7a;
 }
-body{background:transparent;font-family:'Tajawal',sans-serif;direction:rtl;}
-#app{background:transparent;padding:12px 8px 20px;}
+body{
+    background:transparent;
+    font-family:'Tajawal',sans-serif;
+    direction:rtl;
+    margin:0;
+    min-height:100ddvh;
+    overflow-x:hidden;
+}
+
+#app{
+    background:transparent;
+    min-height:100ddvh;
+    display:flex;
+    flex-direction:column;
+}
 .page-nav{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;}
 .dot{width:10px;height:10px;border-radius:50%;background:#ccc;cursor:pointer;transition:all .3s;border:none;padding:0;}
 .dot.active{background:var(--green);transform:scale(1.3);}
 .dot:hover{background:var(--green-mid);}
-.card{width:100%;max-width:420px;margin:0 auto;background:var(--cream);border-radius:4px;position:relative;overflow:hidden;min-height:580px;}
+.card{
+    width:100%;
+    max-width:420px;
+    margin:auto;
+    background:var(--cream);
+    border-radius:4px;
+    position:relative;
+    overflow:hidden;
+    min-height:100ddvh;
+    display:flex;
+    flex-direction:column;
+}
 .page{display:none;flex-direction:column;align-items:center;}
 .page.active{display:flex;}
 .arch-wrap{width:88%;margin:-8px auto 0;background:#8fac6a;border-radius:120px 120px 0 0;padding:20px 20px 24px;text-align:center;position:relative;z-index:2;}
@@ -93,11 +121,97 @@ body{background:transparent;font-family:'Tajawal',sans-serif;direction:rtl;}
 .petal-container{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:99;}
 .petal{position:absolute;top:-30px;opacity:0;animation:fall-p linear infinite;font-size:16px;}
 @keyframes fall-p{0%{opacity:.9;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(620px) rotate(540deg)}}
-.btn-row{display:flex;justify-content:center;gap:10px;margin:14px auto 0;max-width:420px;}
+.btn-row{
+    position:sticky;
+    bottom:0;
+    z-index:1000;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    padding:10px;
+    background:rgba(247,245,240,.95);
+    backdrop-filter:blur(6px);
+    width:100%;
+    max-width:420px;
+    margin:auto;
+}
 .nav-btn{flex:1;padding:9px;border:1px solid #c8dcc4;border-radius:8px;background:#fff;color:var(--green-dark);font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;max-width:180px;}
 .nav-btn:hover{background:var(--green-light);}
 .nav-btn.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark);}
 .nav-btn.primary:hover{background:var(--green);}
+
+/* الهواتف الصغيرة */
+@media (max-width:360px){
+
+    .main-names{
+        font-size:38px;
+    }
+
+    .countdown{
+        gap:4px;
+    }
+
+    .cd-num{
+        font-size:18px;
+    }
+
+    .date-val{
+        font-size:16px;
+    }
+
+    .nav-btn{
+        font-size:12px;
+        padding:8px;
+    }
+}
+
+/* أغلب الهواتف */
+@media (max-width:480px){
+
+    .arch-wrap{
+        width:95%;
+        padding:16px;
+    }
+
+    .main-names{
+        font-size:44px;
+    }
+
+    .p2-inner,
+    .comments-wrap,
+    .rsvp-wrap{
+        padding-right:12px;
+        padding-left:12px;
+    }
+}
+
+/* التابلت */
+@media (min-width:768px){
+
+    .card{
+        max-width:600px;
+    }
+
+    .main-names{
+        font-size:64px;
+    }
+
+    .cd-num{
+        font-size:30px;
+    }
+}
+
+/* الشاشات الكبيرة */
+@media (min-width:1200px){
+
+    .card{
+        max-width:700px;
+    }
+
+    .main-names{
+        font-size:72px;
+    }
+}
 </style>
 
 <div id="app">
@@ -301,9 +415,11 @@ const PAGES=[
 ];
 let cur=0;
 const comments=[
- {name:'أحمد زارع',text:'بارك الله لكما وبارك عليكما وجمع بينكما في خير',time:'منذ 40 دقيقة',liked:false,likes:3},
-  {name:'أم محمد',text:'ألف مبروك! يسعد الله أيامكم ويديم المحبة بينكم 🌹',time:'منذ 4 ساعات',liked:false,likes:5},
+  {name:'أم محمد',text:'ألف مبروك! يسعد الله أيامكم ويديم المحبة بينكم 🌹',time:'منذ 5 ساعات',liked:false,likes:5},
   {name:'خالد العمر',text:'مبروك خالد! ربنا يهنيكم ويبارك لكم 💚',time:'منذ 30 دقيقة',liked:false,likes:3},
+    {name:' أحمد زارع',text:' باررك الله لكما وبارك عليكما وجمع بينكما في خير',time:'منذ 40 دقيقة',liked:false,likes:3},
+
+
 
 ];
 const rsvps=[];
